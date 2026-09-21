@@ -1,0 +1,60 @@
+---
+import "@fontsource/sora/400.css";
+import "@fontsource/sora/500.css";
+import "@fontsource/sora/600.css";
+import "@fontsource/sora/700.css";
+import "../styles/global.css";
+import { site } from "../lib/site";
+import StoreCard from "../components/StoreCard.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const defaultTitle = `${site.name} | ${site.role}`;
+const {
+  title = defaultTitle,
+  description = "Product & motion designer with a decade of turning complex products into simple, living experiences. Selected work, services and awards.",
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/assets/og.jpg", Astro.site);
+const analytics = import.meta.env.PUBLIC_VERCEL_ANALYTICS === "true";
+const storeBadge = import.meta.env.PUBLIC_STORE_BADGE === "true";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#121212" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+  </head>
+  <body>
+    <slot />
+    {storeBadge && <StoreCard />}
+    <script>
+      import "../scripts/smooth-scroll";
+    </script>
+    {analytics && (
+      <script>
+        import { inject } from "@vercel/analytics";
+        import { injectSpeedInsights } from "@vercel/speed-insights";
+        inject();
+        injectSpeedInsights();
+      </script>
+    )}
+  </body>
+</html>

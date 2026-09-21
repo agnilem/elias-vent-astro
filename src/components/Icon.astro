@@ -1,0 +1,20 @@
+---
+// Lucide-style stroke icons used across the theme.
+interface Props {
+  name: "arrow-right" | "arrow-up-right" | "menu" | "x" | "plus" | "carousel-arrow";
+  size?: number;
+  stroke?: number;
+}
+const { name, size = 20, stroke = 2 } = Astro.props;
+const paths: Record<Props["name"], string[]> = {
+  "arrow-right": ["M5 12h14", "m12 5 7 7-7 7"],
+  "arrow-up-right": ["M7 7h10v10", "M7 17 17 7"],
+  menu: ["M4 6h16", "M4 12h16", "M4 18h16"],
+  x: ["M18 6 6 18", "m6 6 12 12"],
+  plus: ["M5 12h14", "M12 5v14"],
+  "carousel-arrow": ["M7 17L17 7M7 7H17V17"],
+};
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={stroke} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {paths[name].map((d) => <path d={d} />)}
+</svg>

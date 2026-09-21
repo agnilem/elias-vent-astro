@@ -1,0 +1,107 @@
+---
+import { site } from "../lib/site";
+import Icon from "./Icon.astro";
+---
+<header class="topbar" data-topbar>
+  <div class="topbar-bar container">
+    <div class="topbar-logo">
+      <a href="/" class="body" style="color: var(--white)">{site.name}</a>
+      <p class="body muted">{site.role}</p>
+    </div>
+    <nav class="topbar-links" aria-label="Primary">
+      {site.nav.map((l) => <a class="body-sb" href={l.href}>{l.label}</a>)}
+    </nav>
+    <button type="button" class="topbar-menu" aria-label="Open menu" aria-expanded="false" data-menu-btn>
+      <span class="topbar-icon" data-icon-open><Icon name="menu" size={24} stroke={1} /></span>
+      <span class="topbar-icon" data-icon-close style="opacity: 0"><Icon name="x" size={24} stroke={1} /></span>
+    </button>
+  </div>
+  <nav class="topbar-mobile" aria-label="Mobile" aria-hidden="true" data-mobile-nav>
+    {site.nav.map((l) => <a class="h3" href={l.href} tabindex="-1">{l.label}</a>)}
+  </nav>
+</header>
+
+<script>
+  import { Spring, reducedMotion } from "../scripts/lib";
+
+  // Always shown while #hero is on screen; past it, hides on scroll-down and
+  // reveals on scroll-up (spring 520/42/0.7, y 0 -> -120px, opacity 1 -> 0).
+  // While the phone menu is open it stays shown.
+  const header = document.querySelector<HTMLElement>("[data-topbar]")!;
+  const btn = header.querySelector<HTMLButtonElement>("[data-menu-btn]")!;
+  const nav = header.querySelector<HTMLElement>("[data-mobile-nav]")!;
+  const iconOpen = header.querySelector<HTMLElement>("[data-icon-open]")!;
+  const iconClose = header.querySelector<HTMLElement>("[data-icon-close]")!;
+  const phone = window.matchMedia("(max-width: 809px)");
+  const spring = new Spring(0, 520, 42, 0.7);
+  let open = false;
+  let lastY = window.scrollY || 0;
+  let suppress = 0;
+  let raf = 0;
+  let last = 0;
+
+  const render = () => {
+    const p = spring.x;
+    header.style.transform = p ? `translate3d(0, ${(-120 * p).toFixed(2)}px, 0)` : "";
+    header.style.opacity = p ? String(1 - p) : "";
+  };
+  const tick = (t: number) => {
+    const dt = last ? (t - last) / 1000 : 1 / 60;
+    last = t;
+    spring.step(dt);
+    render();
+    if (spring.settled) {
+      raf = 0;
+      last = 0;
+    } else raf = requestAnimationFrame(tick);
+  };
+  const setHidden = (h: number) => {
+    if (spring.target === h) return;
+    if (reducedMotion()) {
+      spring.jump(h);
+      render();
+      return;
+    }
+    spring.set(h);
+    if (!raf) raf = requestAnimationFrame(tick);
+  };
+
+  const setOpen = (o: boolean) => {
+    open = o;
+    nav.classList.toggle("is-open", o);
+    nav.setAttribute("aria-hidden", String(!o));
+    nav.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", o ? "0" : "-1"));
+    btn.setAttribute("aria-expanded", String(o));
+    btn.setAttribute("aria-label", o ? "Close menu" : "Open menu");
+    iconOpen.style.opacity = o ? "0" : "1";
+    iconClose.style.opacity = o ? "1" : "0";
+    if (o) setHidden(0);
+    // the drawer reflow fires a fake downward scroll delta; ignore hide logic briefly
+    suppress = Date.now() + 700;
+  };
+  btn.addEventListener("click", () => setOpen(!open));
+  nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  phone.addEventListener("change", () => {
+    if (!phone.matches && open) setOpen(false);
+  });
+
+  const onScroll = () => {
+    const cur = window.scrollY || 0;
+    if (Date.now() < suppress || open) {
+      lastY = cur;
+      setHidden(0);
+      return;
+    }
+    const hero = document.getElementById("hero");
+    const heroBottom = hero ? hero.getBoundingClientRect().bottom + cur : window.innerHeight * 5;
+    const down = cur > lastY + 2;
+    const up = cur < lastY - 2;
+    if (cur < heroBottom - 40) setHidden(0);
+    else if (down) setHidden(1);
+    else if (up) setHidden(0);
+    lastY = cur;
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+</script>

@@ -1,0 +1,94 @@
+---
+import { site } from "../../lib/site";
+import ScrollWords from "../ScrollWords.astro";
+---
+<section class="awards container" data-awards>
+  <div class="awards-card">
+    <ScrollWords as="h2" class="h2 balance" text="Awards" />
+    <div class="awards-rows">
+      {site.awards.map((r, i) => (
+        <>
+          {i > 0 && <div class="divider" aria-hidden="true"></div>}
+          <div class="award-row" data-row={i}>
+            <p class="body award-year">{r.year}</p>
+            <div class="award-right">
+              <h4 class="h4 balance">{r.project}</h4>
+              <p class="body muted">{r.award}</p>
+            </div>
+            <div class="award-preview"><img src={r.cover} alt={r.alt} loading="lazy" /></div>
+          </div>
+        </>
+      ))}
+    </div>
+  </div>
+  <div class="award-cursor" aria-hidden="true" data-cursor>
+    <div class="award-cursor-inner">
+      {site.awards.map((r) => <img src={r.cover} alt="" loading="lazy" />)}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { Spring, reducedMotion } from "../../scripts/lib";
+
+  // Desktop (>=1200px, hover-capable): hovering a row activates it (year
+  // brightens, gap 80 -> 48px) and the project's cover follows the cursor on a
+  // spring (420/40/0.6). Below that the cover shows inline instead (CSS).
+  const root = document.querySelector<HTMLElement>("[data-awards]");
+  if (root) {
+    const desktop = window.matchMedia("(min-width: 1200px) and (hover: hover) and (pointer: fine)");
+    const rows = Array.from(root.querySelectorAll<HTMLElement>("[data-row]"));
+    const cursor = root.querySelector<HTMLElement>("[data-cursor]")!;
+    const imgs = Array.from(cursor.querySelectorAll("img"));
+    const sx = new Spring(-200, 420, 40, 0.6);
+    const sy = new Spring(-200, 420, 40, 0.6);
+    let hover: number | null = null;
+    let raf = 0;
+    let last = 0;
+
+    const setHover = (i: number | null) => {
+      hover = i;
+      const on = desktop.matches && i !== null;
+      rows.forEach((r, k) => r.classList.toggle("is-active", on && k === i));
+      cursor.classList.toggle("is-on", on);
+      imgs.forEach((im, k) => im.classList.toggle("is-on", k === i));
+    };
+    rows.forEach((r, i) => {
+      r.addEventListener("mouseenter", () => setHover(i));
+      r.addEventListener("mouseleave", () => {
+        if (hover === i) setHover(null);
+      });
+    });
+    const render = () => {
+      cursor.style.transform = `translate3d(${sx.x}px, ${sy.x}px, 0)`;
+    };
+    const tick = (t: number) => {
+      const dt = last ? (t - last) / 1000 : 1 / 60;
+      last = t;
+      sx.step(dt);
+      sy.step(dt);
+      render();
+      if (sx.settled && sy.settled) {
+        raf = 0;
+        last = 0;
+      } else raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        if (!desktop.matches) return;
+        if (reducedMotion()) {
+          sx.jump(e.clientX);
+          sy.jump(e.clientY);
+          render();
+          return;
+        }
+        sx.set(e.clientX);
+        sy.set(e.clientY);
+        if (!raf) raf = requestAnimationFrame(tick);
+      },
+      { passive: true }
+    );
+    render();
+  }
+</script>

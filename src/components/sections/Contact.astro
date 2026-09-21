@@ -1,0 +1,54 @@
+---
+import { site } from "../../lib/site";
+import ScrollWords from "../ScrollWords.astro";
+import Icon from "../Icon.astro";
+const { contact } = site;
+---
+<section id="contact" class="contact container">
+  <div class="contact-main">
+    <div class="contact-left">
+      <ScrollWords as="h2" class="h2 balance" text={contact.heading} />
+      <div class="contact-card">
+        <div class="contact-avatar"><img src="/assets/avatar.webp" alt={site.name} loading="lazy" /></div>
+        <a class="body" href={site.phone.href}>{site.phone.label}</a>
+      </div>
+    </div>
+    <div class="contact-right">
+      <p class="body-sb" style="color: var(--grey)">{contact.label}</p>
+      <p class="body balance">{contact.text}</p>
+      <form class="form" data-contact-form>
+        <input class="input" type="text" name="name" placeholder="Name" autocomplete="name" />
+        <input class="input" type="email" name="email" placeholder="Email" autocomplete="email" required />
+        <textarea class="input" name="message" placeholder="Message" rows="4"></textarea>
+        <button type="submit" class="submit">
+          <span class="body-sb" data-label>Send Message</span>
+          <span class="submit-icon"><Icon name="arrow-up-right" size={20} stroke={2} /></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Submit button carries the Framer Submit Button states (Default / Loading
+  // with a spinning arrow / Success with a green arrow / Error). No backend: the
+  // demo submission resolves to Success after 1.2s. Wire your form service here.
+  const LABEL = { idle: "Send Message", loading: "Sending…", success: "Thank you", error: "Something went wrong" } as const;
+  document.querySelectorAll<HTMLFormElement>("[data-contact-form]").forEach((form) => {
+    const btn = form.querySelector<HTMLButtonElement>(".submit")!;
+    const label = btn.querySelector<HTMLElement>("[data-label]")!;
+    let state: keyof typeof LABEL = "idle";
+    const set = (s: keyof typeof LABEL) => {
+      state = s;
+      btn.className = "submit" + (s === "idle" ? "" : ` is-${s}`);
+      btn.disabled = s === "loading";
+      label.textContent = LABEL[s];
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (state === "loading" || state === "success") return;
+      set("loading");
+      window.setTimeout(() => set("success"), 1200);
+    });
+  });
+</script>

@@ -1,0 +1,72 @@
+---
+import { getProjects, site } from "../../lib/site";
+import Icon from "../Icon.astro";
+
+// Slides come from the projects collection (heroImage / title / category).
+const projects = await getProjects();
+const slides = projects.map((p) => ({
+  src: p.data.heroImage,
+  alt: p.data.heroAlt,
+  category: p.data.category,
+  title: p.data.title,
+  link: `/projects/${p.id}`,
+}));
+const n = slides.length;
+---
+<section id="hero" class="hero container">
+  <div class="hero-stage">
+    <div style="width: 100%; position: relative; display: flex; flex-direction: column; align-items: center">
+      <div class="pc-root" style={`--n: ${n}`} data-carousel data-slides={JSON.stringify(slides.map((s) => s.src))}>
+        <div class="pc-sticky">
+          <canvas class="pc-canvas"></canvas>
+          <div class="pc-overlays">
+            {slides.map((s, i) => (
+              <div class={"pc-center pc-overlay" + (i === 0 ? " pc-ref-active" : "")} style={`--i: ${i}`} data-overlay>
+                <a class="pc-ref-link" href={s.link} aria-label={`Open ${s.title}`}>
+                  <span class="pc-ref-ltr pc-cat">{s.category}</span>
+                  <h2 class="pc-title">
+                    {s.title.split("").map((ch, li) => (
+                      <span class="pc-ref-ltr" style={`transition-delay: ${(0.12 + li * 0.03).toFixed(2)}s`}>{ch}</span>
+                    ))}
+                  </h2>
+                  <span class="pc-ref-btn" aria-hidden="true"><Icon name="carousel-arrow" size={22} /></span>
+                </a>
+              </div>
+            ))}
+          </div>
+          {n > 1 && (
+            <div class="pc-bar" data-bar>
+              {slides.map((s, i) => (
+                <button type="button" class="pc-nav-btn" aria-label={`Go to ${s.title}`} aria-current={i === 0 ? "true" : undefined} data-goto={i}>
+                  <span class={"pc-nav-bar" + (i === 0 ? " pc-nav-active" : "")}></span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div class="pc-fallback">
+          {slides.map((s) => (
+            <section class="pc-fb-slide pc-ref-active">
+              <div class="pc-fb-media"><img src={s.src} alt={s.alt} loading="lazy" /></div>
+              <div class="pc-center">
+                <a class="pc-ref-link" href={s.link} aria-label={`Open ${s.title}`}>
+                  <span class="pc-ref-ltr pc-cat">{s.category}</span>
+                  <h2 class="pc-title">{s.title.split("").map((ch) => <span class="pc-ref-ltr">{ch}</span>)}</h2>
+                  <span class="pc-ref-btn" aria-hidden="true"><Icon name="carousel-arrow" size={22} /></span>
+                </a>
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <h1 class="body balance hero-heading">{site.tagline}</h1>
+  </div>
+</section>
+
+<script>
+  import { initCarousel } from "../../scripts/carousel";
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach(initCarousel);
+</script>

@@ -1,0 +1,15 @@
+---
+// Line-by-line scroll reveal: text split into word spans (see scripts/reveal.ts).
+interface Props {
+  as?: "h1" | "h2" | "h3" | "h4" | "p";
+  class?: string;
+  style?: string;
+  text: string;
+}
+const { as: Tag = "h2", class: className, style, text } = Astro.props;
+const words = text.split(" ");
+---
+<Tag class={className} style={style}>{words.map((w, i) => <span><span class="sw">{w}</span>{i < words.length - 1 ? " " : ""}</span>)}</Tag>
+<script>
+  import "../scripts/reveal";
+</script>

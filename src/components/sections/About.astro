@@ -1,0 +1,59 @@
+---
+import { site } from "../../lib/site";
+import ScrollWords from "../ScrollWords.astro";
+import ScrollFade from "../ScrollFade.astro";
+const { about } = site;
+---
+<section id="about-alt" class="about">
+  <div class="about-stage">
+    <div class="about-parallax" data-parallax>
+      <div class="about-media">
+        <img src="/assets/portrait.webp" alt={`${site.name}, ${site.role.toLowerCase()}`} loading="lazy" />
+      </div>
+    </div>
+    <div class="about-scrim" aria-hidden="true"></div>
+    <div class="about-content">
+      <div class="about-statement-row container">
+        <div class="about-statement">
+          <ScrollWords as="h2" class="h2 balance" style="text-align: end" text={about.statement} />
+        </div>
+      </div>
+      <div class="about-bio-row container">
+        <div class="about-bio-col">
+          <p class="body muted">ABOUT</p>
+          <ScrollFade>
+            <div class="about-paragraphs">
+              <p class="body balance">{about.bio}</p>
+              <p class="body balance">
+                {about.contactLead} <a href={`mailto:${site.email}`} style="color: var(--white)">{site.email}</a> {about.contactTail}
+              </p>
+            </div>
+          </ScrollFade>
+          <p class="body muted">{site.name.toUpperCase()} — {site.year}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { onScrollFrame, reducedMotion } from "../../scripts/lib";
+
+  // Scroll parallax for the full-bleed portrait (port of ImageParallax.tsx): the
+  // media block is taller than its stage, so it drifts against the scroll (up to
+  // 210px, capped by the real overhang) while zooming in up to 24%.
+  const el = document.querySelector<HTMLElement>("[data-parallax]");
+  if (el && !reducedMotion()) {
+    const host = el.parentElement!;
+    onScrollFrame(() => {
+      const r = host.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const child = el.firstElementChild as HTMLElement | null;
+      const slack = child ? Math.max(0, (child.offsetHeight - r.height) / 2) : 0;
+      const shift = Math.min(210, slack * 0.9);
+      const c = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+      const q = Math.max(0, Math.min(1, (vh - r.top) / vh));
+      el.style.transform = "translate3d(0," + (c * shift).toFixed(2) + "px,0) scale(" + (1 + 0.24 * q).toFixed(4) + ")";
+    });
+  }
+</script>

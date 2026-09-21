@@ -1,0 +1,18 @@
+---
+import { site } from "../../lib/site";
+const { gallery } = site;
+---
+<section id="work" class="gallery">
+  <div class="gallery-pin">
+    <div class="og-root" data-orbit data-images={JSON.stringify(gallery.images)}>
+      <div class="og-layer" data-layer></div>
+      <div class="og-glow" aria-hidden="true" data-glow></div>
+    </div>
+    <h2 class="h2 balance gallery-heading">{gallery.heading}<span class="muted">{gallery.headingMuted}</span></h2>
+  </div>
+</section>
+
+<script>
+  import { initOrbit } from "../../scripts/orbit";
+  document.querySelectorAll<HTMLElement>("[data-orbit]").forEach(initOrbit);
+</script>

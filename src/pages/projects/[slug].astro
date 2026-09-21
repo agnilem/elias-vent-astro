@@ -1,0 +1,66 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Topbar from "../../components/Topbar.astro";
+import Contact from "../../components/sections/Contact.astro";
+import Footer from "../../components/sections/Footer.astro";
+import Icon from "../../components/Icon.astro";
+import { getProjects, site } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[i + 1] ?? null },
+  }));
+}
+
+const { project, next } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+const hasBody = Boolean(project.body?.trim());
+---
+<Base title={`${p.title} | ${site.name}`} description={p.overview}>
+  <Topbar />
+  <main>
+    <section class="project-hero">
+      <div class="project-head">
+        <p class="body">{p.category}</p>
+        <h1 class="h1">{p.title}</h1>
+        <div class="project-meta">
+          <div class="project-meta-col"><p class="body muted">Role</p><p class="body">{p.role}</p></div>
+          <div class="project-meta-col"><p class="body muted">Timeline</p><p class="body">{p.timeline}</p></div>
+          <div class="project-meta-col"><p class="body muted">Completed</p><p class="body">{p.year}</p></div>
+        </div>
+      </div>
+      <div class="project-cover"><img src={p.cover} alt={p.coverAlt} /></div>
+      <div class="project-content">
+        <div class="project-col">
+          <h2 class="body muted">Overview</h2>
+          <p class="body">{p.overview}</p>
+          {hasBody && <div class="project-md"><Content /></div>}
+        </div>
+        <div class="project-col">
+          <h2 class="body muted">The challenge</h2>
+          <p class="body">{p.challenge}</p>
+        </div>
+      </div>
+    </section>
+    <div class="project-showcase-wrap">
+      <div class="project-showcase"><img src={p.showcase} alt={p.showcaseAlt} loading="lazy" /></div>
+    </div>
+    {next && (
+      <section class="next-project">
+        <a class="next-link" href={`/projects/${next.id}`} aria-label={`Next project: ${next.data.title}`}>
+          <span class="next-text">
+            <span class="body">{next.data.category}</span>
+            <span class="h2">{next.data.title}</span>
+          </span>
+          <span class="round-btn" aria-hidden="true"><Icon name="arrow-right" size={22} /></span>
+        </a>
+      </section>
+    )}
+    <Contact />
+  </main>
+  <Footer />
+</Base>

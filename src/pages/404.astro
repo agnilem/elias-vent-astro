@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+import Topbar from "../components/Topbar.astro";
+import Footer from "../components/sections/Footer.astro";
+import ScrollRing from "../components/ScrollRing.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../lib/site";
+---
+<Base title={`Page not found | ${site.name}`}>
+  <Topbar />
+  <main>
+    <section class="nf-hero">
+      <ScrollRing images={site.ring} radius={360} scrollSpeed={0.02} autoSpin={2} />
+      <div class="nf-content">
+        <h1 class="h1">Page not found</h1>
+        <p class="body muted nf-text">The page you’re looking for doesn’t exist or may have moved. Let’s get you back on track.</p>
+        <a class="btn" href="/"><span class="body-sb">Back to home</span><Icon name="arrow-up-right" size={20} /></a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

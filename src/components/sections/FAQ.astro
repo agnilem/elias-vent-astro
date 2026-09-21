@@ -1,0 +1,63 @@
+---
+import { site } from "../../lib/site";
+import ScrollWords from "../ScrollWords.astro";
+import Icon from "../Icon.astro";
+---
+<section class="faq container">
+  <div class="faq-card">
+    <div class="faq-left">
+      <ScrollWords as="h2" class="h2 balance" text="Frequently asked questions" />
+    </div>
+    <div class="faq-rows" data-faq>
+      {site.faq.map((it, i) => (
+        <>
+          {i > 0 && <div class="divider" aria-hidden="true"></div>}
+          <button type="button" class="faq-item" aria-expanded="false">
+            <div class="faq-head">
+              <h4 class="h4 balance faq-question">{it.q}</h4>
+              <span class="faq-toggle"><Icon name="plus" size={22} stroke={1.5} /></span>
+            </div>
+            <div class="faq-answer-wrap" aria-hidden="true">
+              <p class="body balance faq-answer">{it.a}</p>
+            </div>
+          </button>
+        </>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // FAQ accordion (Framer FAQ Item Closed/Open variants): one open at a time,
+  // height 20px <-> auto over 0.3s cubic-bezier(0.44,0,0.56,1).
+  document.querySelectorAll<HTMLElement>("[data-faq]").forEach((root) => {
+    const items = Array.from(root.querySelectorAll<HTMLButtonElement>(".faq-item"));
+    const setOpen = (item: HTMLButtonElement, open: boolean) => {
+      const wrap = item.querySelector<HTMLElement>(".faq-answer-wrap")!;
+      item.classList.toggle("is-open", open);
+      item.setAttribute("aria-expanded", String(open));
+      wrap.setAttribute("aria-hidden", String(!open));
+      const from = wrap.getBoundingClientRect().height;
+      wrap.style.height = "auto";
+      const to = open ? wrap.scrollHeight : 20;
+      wrap.style.height = `${from}px`;
+      void wrap.offsetHeight;
+      wrap.style.height = `${to}px`;
+      if (open) {
+        const done = (e: TransitionEvent) => {
+          if (e.propertyName !== "height") return;
+          wrap.removeEventListener("transitionend", done);
+          if (item.classList.contains("is-open")) wrap.style.height = "auto";
+        };
+        wrap.addEventListener("transitionend", done);
+      }
+    };
+    items.forEach((item) =>
+      item.addEventListener("click", () => {
+        const wasOpen = item.classList.contains("is-open");
+        items.forEach((o) => o !== item && o.classList.contains("is-open") && setOpen(o, false));
+        setOpen(item, !wasOpen);
+      })
+    );
+  });
+</script>

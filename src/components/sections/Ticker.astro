@@ -1,0 +1,18 @@
+---
+import { site } from "../../lib/site";
+---
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" style="animation-duration: 48s" data-ticker>
+    <span class="ticker-text">{site.ticker}</span>
+    <span class="ticker-text">{site.ticker}</span>
+  </div>
+</div>
+
+<script>
+  // Framer Ticker effect: 50 px/s to the left, 10px gap, text at 20% opacity.
+  document.querySelectorAll<HTMLElement>("[data-ticker]").forEach((el) => {
+    const measure = () => (el.style.animationDuration = `${el.scrollWidth / 2 / 50}s`);
+    measure();
+    new ResizeObserver(measure).observe(el);
+  });
+</script>
