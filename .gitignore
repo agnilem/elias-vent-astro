@@ -4,3 +4,5 @@ dist/
 .vercel/
 .env*
 .DS_Store
+.vercel
+launch/
