@@ -14,7 +14,3 @@ showcaseAlt: "Fauna interface showcase"
 heroImage: /assets/hero-fauna.webp
 heroAlt: "Woman's face"
 ---
-
-A DTC skincare brand with a science-first story. Fauna’s site pairs editorial art direction with a frictionless routine-builder and checkout.
-
-I delivered the e-commerce experience end to end, from product pages to post-purchase education.

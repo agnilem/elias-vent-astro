@@ -1,6 +1,9 @@
 ---
 import { site } from "../lib/site";
 import Icon from "./Icon.astro";
+// The link for the current page is white, the rest sit at 60% (Framer current-page link style).
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (href: string) => href === path;
 ---
 <header class="topbar" data-topbar>
   <div class="topbar-bar container">
@@ -9,7 +12,7 @@ import Icon from "./Icon.astro";
       <p class="body muted">{site.role}</p>
     </div>
     <nav class="topbar-links" aria-label="Primary">
-      {site.nav.map((l) => <a class="body-sb" href={l.href}>{l.label}</a>)}
+      {site.nav.map((l) => <a class:list={["body-sb", { "is-current": isCurrent(l.href) }]} href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a>)}
     </nav>
     <button type="button" class="topbar-menu" aria-label="Open menu" aria-expanded="false" data-menu-btn>
       <span class="topbar-icon" data-icon-open><Icon name="menu" size={24} stroke={1} /></span>
@@ -17,7 +20,7 @@ import Icon from "./Icon.astro";
     </button>
   </div>
   <nav class="topbar-mobile" aria-label="Mobile" aria-hidden="true" data-mobile-nav>
-    {site.nav.map((l) => <a class="h3" href={l.href} tabindex="-1">{l.label}</a>)}
+    {site.nav.map((l) => <a class:list={["h3", { "is-current": isCurrent(l.href) }]} href={l.href} tabindex="-1">{l.label}</a>)}
   </nav>
 </header>
 

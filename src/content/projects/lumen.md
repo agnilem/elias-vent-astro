@@ -14,7 +14,3 @@ showcaseAlt: "Lumen interface showcase"
 heroImage: /assets/hero-lumen.webp
 heroAlt: "Man in profile"
 ---
-
-Lumen is a fintech app that makes cash flow legible for freelancers. Balances, upcoming taxes, and safe-to-spend live on one screen.
-
-I designed the app and the brand’s motion system, keeping numbers calm and actions obvious.

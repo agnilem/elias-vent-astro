@@ -14,7 +14,3 @@ showcaseAlt: "Pace interface showcase"
 heroImage: /assets/hero-pace.webp
 heroAlt: "Running man"
 ---
-
-A running companion built around effort, not just distance. Pace turns raw workout data into a daily rhythm runners actually want to keep.
-
-I designed the full product: onboarding, live run screen, and a review flow that celebrates consistency over speed.

@@ -28,7 +28,7 @@ npm run preview  # serves dist/
 ## Editing content
 
 - `src/content/site.json` holds all site copy: name, tagline, navigation, socials, awards, principles, services, gallery, FAQ, contact text and the 404 ring images.
-- `src/content/projects/*.md` holds one file per case study. The frontmatter fields (title, category, order, role, timeline, year, overview, challenge, images) drive both the home carousel and `/projects/<file-name>`. Any Markdown body renders under the overview.
+- `src/content/projects/*.md` holds one file per case study. The frontmatter fields (title, category, order, role, timeline, year, overview, challenge, images) drive both the home carousel and `/projects/<file-name>`. Any Markdown body renders under the overview (the demo files leave it empty, matching the original).
 - Images live in `public/assets/`.
 - Colors, type scale and layout live in `src/styles/global.css`.
 

@@ -20,7 +20,7 @@ const { contact } = site;
         <input class="input" type="text" name="name" placeholder="Name" autocomplete="name" />
         <input class="input" type="email" name="email" placeholder="Email" autocomplete="email" required />
         <textarea class="input" name="message" placeholder="Message" rows="4"></textarea>
-        <button type="submit" class="submit">
+        <button type="submit" class="submit is-disabled">
           <span class="body-sb" data-label>Send Message</span>
           <span class="submit-icon"><Icon name="arrow-up-right" size={20} stroke={2} /></span>
         </button>
@@ -38,12 +38,16 @@ const { contact } = site;
     const btn = form.querySelector<HTMLButtonElement>(".submit")!;
     const label = btn.querySelector<HTMLElement>("[data-label]")!;
     let state: keyof typeof LABEL = "idle";
+    // Framer "Disabled" variant: dimmed until the required email field is valid.
+    const idleClass = () => (form.checkValidity() ? "submit" : "submit is-disabled");
     const set = (s: keyof typeof LABEL) => {
       state = s;
-      btn.className = "submit" + (s === "idle" ? "" : ` is-${s}`);
+      btn.className = s === "idle" ? idleClass() : `submit is-${s}`;
       btn.disabled = s === "loading";
       label.textContent = LABEL[s];
     };
+    form.addEventListener("input", () => state === "idle" && (btn.className = idleClass()));
+    btn.className = idleClass();
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       if (state === "loading" || state === "success") return;

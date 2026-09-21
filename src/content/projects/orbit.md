@@ -14,7 +14,3 @@ showcaseAlt: "Orbit interface showcase"
 heroImage: /assets/hero-orbit.webp
 heroAlt: "Bright hall"
 ---
-
-Orbit is a B2B SaaS platform for revenue teams. I redesigned the core workspace around a single pipeline view that scales from seed startups to large sales orgs.
-
-The system ships with a full component library and a dense-data mode for power users.

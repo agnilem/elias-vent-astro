@@ -14,7 +14,3 @@ showcaseAlt: "Halo interface showcase"
 heroImage: /assets/hero-halo.webp
 heroAlt: "Healthy food"
 ---
-
-Halo helps people understand their health baseline with continuous tracking and plain-language insights instead of charts full of jargon.
-
-The work covered the mobile app and a clinician dashboard, unified by one calm, clinical-but-warm design language.
