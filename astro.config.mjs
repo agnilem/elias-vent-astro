@@ -3,5 +3,5 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   output: "static",
-  site: "https://elias-vent-astro.vercel.app",
+  site: "https://elias-vent.startfrom.co",
 });
