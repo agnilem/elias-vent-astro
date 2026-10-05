@@ -1,4 +1,5 @@
 ---
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 import "@fontsource/sora/400.css";
 import "@fontsource/sora/500.css";
 import "@fontsource/sora/600.css";
@@ -56,5 +57,6 @@ const storeBadge = import.meta.env.PUBLIC_STORE_BADGE === "true";
         injectSpeedInsights();
       </script>
     )}
+    <GoogleAnalytics />
   </body>
 </html>

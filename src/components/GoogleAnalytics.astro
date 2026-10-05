@@ -1,0 +1,18 @@
+---
+/**
+ * Google Analytics for the live demo only. Renders nothing unless PUBLIC_GA_ID is
+ * set, and that is set only in the demo's Vercel project, so your copy ships without it.
+ */
+const id = import.meta.env.PUBLIC_GA_ID;
+---
+{id && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`}></script>
+    <script is:inline define:vars={{ id }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", id);
+    </script>
+  </>
+)}
