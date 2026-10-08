@@ -1,0 +1,82 @@
+{
+  "name": "Elias Vent",
+  "role": "Product & Motion Designer",
+  "tagline": "Interfaces that move — and move people. A decade turning complex products into simple, living experiences.",
+  "email": "hello@example.com",
+  "phone": { "label": "+1 (202) 555-0142", "href": "tel:+12025550142" },
+  "year": "2026",
+  "nav": [
+    { "label": "Home", "href": "/" },
+    { "label": "About", "href": "/#about-alt" },
+    { "label": "Contact me", "href": "/#contact" }
+  ],
+  "footerNav": [
+    { "label": "Works", "href": "/#work" },
+    { "label": "About", "href": "/#about-alt" },
+    { "label": "Contact me", "href": "/#contact" }
+  ],
+  "socials": [
+    { "label": "LinkedIn", "href": "https://www.linkedin.com" },
+    { "label": "Twitter (X)", "href": "https://x.com" },
+    { "label": "Threads", "href": "https://www.threads.com" }
+  ],
+  "about": {
+    "statement": "I shape the product where design, motion, and code meet, bringing it to life with essential animation",
+    "bio": "I’m Elias, a freelance Product & Motion Designer in Berlin, working remotely. For a decade, I’ve simplified complex products for startups and global brands. Before going independent, I led design at two startups.",
+    "contactLead": "For enquiries or collaborations just reach out to",
+    "contactTail": "and let’s start talking."
+  },
+  "awards": [
+    { "project": "PACE", "award": "SITE OF THE DAY", "year": "2025", "cover": "/assets/award-pace.webp", "alt": "Interface of mobile app" },
+    { "project": "FAUNA", "award": "DEVELOPER AWARD", "year": "2023", "cover": "/assets/award-fauna.webp", "alt": "Demonstration of the logo on the can" },
+    { "project": "LUMEN", "award": "SITE OF THE DAY", "year": "2024", "cover": "/assets/award-lumen.webp", "alt": "Laptop screen with dashboard" },
+    { "project": "NOVA", "award": "FWA OF THE DAY", "year": "2022", "cover": "/assets/award-nova.webp", "alt": "Phone with a dashboard" },
+    { "project": "HALO", "award": "CSS DESIGN AWARD", "year": "2023", "cover": "/assets/award-halo.webp", "alt": "Mockups with interface" },
+    { "project": "ORBIT", "award": "SITE OF THE DAY", "year": "2024", "cover": "/assets/award-orbit.webp", "alt": "Tablet with a dashboard" },
+    { "project": "VARIOUS PROJECTS", "award": "9 HONORABLE MENTIONS", "year": "2019-25", "cover": "/assets/award-various.webp", "alt": "Tablet with a dashboard" }
+  ],
+  "principles": [
+    { "title": "Design sits at the strategy table", "description": "Good design starts before the first pixel — I get involved early, where the real decisions are made.", "icon": "target", "image": "/assets/principle-1.webp", "alt": "Blurred charcoal and cream abstract streaks" },
+    { "title": "Motion with meaning, never decoration", "description": "Every animation earns its place. I use motion to guide, explain, and make things feel inevitable.", "icon": "sparkles", "image": "/assets/principle-2.webp", "alt": "Blurred blue-grey abstract streaks" },
+    { "title": "Simple, for everyone", "description": "Complexity is easy, clarity is hard. I simplify until the product feels obvious to use.", "icon": "smile", "image": "/assets/principle-3.webp", "alt": "Blurred green abstract streaks" },
+    { "title": "Curious and always learning", "description": "I stay close to new tools and ideas, so your product never feels a step behind.", "icon": "compass", "image": "/assets/principle-4.webp", "alt": "Blurred orange abstract streaks" }
+  ],
+  "ticker": "DESIGN · MOTION · CODE · AND EVERYTHING IN BETWEEN",
+  "services": [
+    { "name": "Product Design", "image": "/assets/orbit-5.webp", "alt": "Analytics dashboard on a laptop resting on a rock", "captions": ["Web & App UI", "User Flows", "Prototyping"] },
+    { "name": "Motion & Interaction", "image": "/assets/orbit-8.webp", "alt": "Two runners in motion with red light trails", "captions": ["Micro-interactions", "Scroll & Transitions", "Prototyped Motion"] },
+    { "name": "Design Systems", "image": "/assets/orbit-4.webp", "alt": "Analytics dashboard on a desktop monitor with cacti", "captions": ["Component Libraries", "Tokens & Foundations", "Documentation"] },
+    { "name": "Brand & Web", "image": "/assets/orbit-3.webp", "alt": "Health platform landing page on a laptop", "captions": ["Visual Identity", "Landing Pages", "Framer Build"] }
+  ],
+  "gallery": {
+    "heading": "Each new project is a step forward — ",
+    "headingMuted": "a chance to learn and grow",
+    "images": [
+      { "src": "/assets/orbit-1.webp", "alt": "Fitness dashboard app on a phone in the dark" },
+      { "src": "/assets/orbit-2.webp", "alt": "Holographic dashboard floating above a glass laptop" },
+      { "src": "/assets/orbit-3.webp", "alt": "Health platform landing page on a laptop" },
+      { "src": "/assets/orbit-4.webp", "alt": "Analytics dashboard on a desktop monitor with cacti" },
+      { "src": "/assets/orbit-5.webp", "alt": "Analytics dashboard on a laptop resting on a rock" },
+      { "src": "/assets/orbit-6.webp", "alt": "Hand holding a phone at golden hour" },
+      { "src": "/assets/orbit-7.webp", "alt": "Laptop showing a dashboard on a red velvet couch" },
+      { "src": "/assets/orbit-8.webp", "alt": "Two runners in motion with red light trails" },
+      { "src": "/assets/orbit-9.webp", "alt": "Project work sample" },
+      { "src": "/assets/orbit-10.webp", "alt": "Project work sample" },
+      { "src": "/assets/orbit-11.webp", "alt": "Project work sample" },
+      { "src": "/assets/orbit-12.webp", "alt": "Project work sample" }
+    ]
+  },
+  "faq": [
+    { "q": "What kind of work do you take on?", "a": "Product design and interface motion for digital products — mostly startups shaping a first release, and teams rebuilding a core experience. Most engagements combine product design, motion and a design system." },
+    { "q": "How do you work with clients?", "a": "Remotely from Berlin, in focused blocks. A typical project runs six to ten weeks: a week of research and scoping, then design sprints with weekly reviews, ending with a handover of files, motion specs and a system your team can extend." },
+    { "q": "Do you work with development teams?", "a": "Yes. I design in production terms — real components, real states, real motion specs — and stay involved through build so what ships matches what was designed. I can also implement front-end work myself." },
+    { "q": "What does a project cost?", "a": "Every project is quoted as a fixed fee based on scope, so there are no hourly surprises. Retainers are available when product work is ongoing." },
+    { "q": "How soon can you start?", "a": "Usually within two to four weeks. Send a short brief through the form below and you’ll get a reply within a day with availability and next steps." }
+  ],
+  "contact": {
+    "heading": "To start a project, collaborate, or discuss, this is the best place to begin",
+    "label": "GET IN TOUCH",
+    "text": "Tell me a bit about what you're working on — I'll get back to you within a day"
+  },
+  "ring": ["/assets/ring-1.webp", "/assets/ring-2.webp", "/assets/ring-3.webp", "/assets/ring-4.webp", "/assets/ring-5.webp", "/assets/ring-6.webp", "/assets/ring-7.webp"]
+}

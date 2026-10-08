@@ -1,5 +1,4 @@
 ---
-import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import Topbar from "../../components/Topbar.astro";
 import Contact from "../../components/sections/Contact.astro";
@@ -17,11 +16,10 @@ export async function getStaticPaths() {
 
 const { project, next } = Astro.props;
 const p = project.data;
-const { Content } = await render(project);
 const hasBody = Boolean(project.body?.trim());
 ---
 <Base title={`${p.title} | ${site.name}`} description={p.overview}>
-  <Topbar />
+  <Topbar path={`/projects/${project.id}`} />
   <main>
     <section class="project-hero">
       <div class="project-head">
@@ -38,7 +36,7 @@ const hasBody = Boolean(project.body?.trim());
         <div class="project-col">
           <h2 class="body muted">Overview</h2>
           <p class="body">{p.overview}</p>
-          {hasBody && <div class="project-md"><Content /></div>}
+          {hasBody && <div class="project-md" set:html={project.rendered?.html} />}
         </div>
         <div class="project-col">
           <h2 class="body muted">The challenge</h2>

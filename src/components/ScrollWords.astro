@@ -10,6 +10,3 @@ const { as: Tag = "h2", class: className, style, text } = Astro.props;
 const words = text.split(" ");
 ---
 <Tag class={className} style={style}>{words.map((w, i) => <span><span class="sw">{w}</span>{i < words.length - 1 ? " " : ""}</span>)}</Tag>
-<script>
-  import "../scripts/reveal";
-</script>

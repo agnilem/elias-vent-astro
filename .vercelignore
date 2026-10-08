@@ -1,0 +1,8 @@
+# The Astro demo deploys from this folder; the Next.js build in next/ deploys on its own.
+next
+zips
+tools
+.baseline-dist
+.checks
+launch
+.env*

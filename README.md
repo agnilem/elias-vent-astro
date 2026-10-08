@@ -1,6 +1,8 @@
-# Elias Vent, an Astro portfolio theme
+# Elias Vent, a portfolio theme for Astro and Next.js
 
-A dark, motion-led portfolio theme for product and motion designers. Static output, no framework runtime: every interaction is a small vanilla TypeScript module.
+A dark, motion-led portfolio theme for product and motion designers. Static output, no framework runtime: every interaction is a small vanilla TypeScript module. This folder is the Astro theme; the same site for Next.js is in [`next/`](next/).
+
+Live demo: [elias-vent.startfrom.co](https://elias-vent.startfrom.co) (Astro), [elias-vent-next.startfrom.co](https://elias-vent-next.startfrom.co) (Next.js)
 
 ## Features
 
@@ -32,7 +34,9 @@ npm run preview  # serves dist/
 - Images live in `public/assets/`.
 - Colors, type scale and layout live in `src/styles/global.css`.
 
-The contact form has no backend. Point it at your form service in `src/components/sections/Contact.astro`.
+The contact form has no backend. Point it at your form service in `src/scripts/fx/contact.ts`.
+
+Every behaviour (menu, carousel, reveals, accordion, form and so on) is a module in `src/scripts/`, loaded once from `src/layouts/Base.astro` through `src/scripts/entry.ts`.
 
 ## Environment variables
 
@@ -42,6 +46,12 @@ Both are off by default. Set them to `true` to enable.
 | --- | --- |
 | `PUBLIC_VERCEL_ANALYTICS` | Loads Vercel Web Analytics and Speed Insights |
 | `PUBLIC_STORE_BADGE` | Shows the fixed store badge in the corner |
+
+## Next.js version
+
+The `next/` folder holds the same site built with Next.js 16 (App Router, React 19, static export). It renders the same markup, styles and behaviour, checked element by element against this build on every page. See [`next/README.md`](next/README.md) to run it on its own.
+
+`next/` is generated from this Astro source by `tools/astro-to-next.mjs` (markup) and `tools/collect-css.mjs` (styles); content and scripts are copied as they are. If you keep both, edit the Astro files and run `node tools/astro-to-next.mjs && node tools/collect-css.mjs`. If you only want Next.js, copy `next/` out and edit it directly.
 
 ## Deploy
 
