@@ -1,8 +1,25 @@
+<p align="center">
+  <a href="https://startfrom.co/templates/elias-vent?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><img alt="Elias Vent: A dark, motion-led portfolio template for Astro and Next.js. Free and MIT licensed, by Startfrom." src="./.github/assets/cover.jpg" width="100%"></a>
+</p>
+
+<p align="center">
+  <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-111111?style=flat-square"></a>
+  <img alt="Astro 7" src="https://img.shields.io/badge/Astro-7-111111?style=flat-square">
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-111111?style=flat-square">
+  <img alt="Static output" src="https://img.shields.io/badge/output-static-111111?style=flat-square">
+</p>
+
+<p align="center">
+  <a href="https://elias-vent.startfrom.co"><b>Astro demo</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://elias-vent-next.startfrom.co"><b>Next.js demo</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://startfrom.co/templates/elias-vent?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><b>Startfrom</b></a>
+</p>
+
 # Elias Vent, a portfolio theme for Astro and Next.js
 
 A dark, motion-led portfolio theme for product and motion designers. Static output, no framework runtime: every interaction is a small vanilla TypeScript module. This folder is the Astro theme; the same site for Next.js is in [`next/`](next/).
-
-Live demo: [elias-vent.startfrom.co](https://elias-vent.startfrom.co) (Astro), [elias-vent-next.startfrom.co](https://elias-vent-next.startfrom.co) (Next.js)
 
 ## Features
 
