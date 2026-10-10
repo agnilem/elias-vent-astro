@@ -4,7 +4,7 @@ import Icon from '@/components/Icon';
 export default function StoreCard() {
   return (
     <>
-      <a className="store-card" href="https://startfrom.co/templates/elias-vent" target="_blank" rel="noreferrer">
+      <a className="store-card" href="https://startfrom.co/" target="_blank" rel="noreferrer">
         Get Elias Vent
         <Icon name="arrow-up-right" size={12} stroke={2} />
       </a>

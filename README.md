@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://startfrom.co/templates/elias-vent?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><img alt="Elias Vent: A dark, motion-led portfolio template for Astro and Next.js. Free and MIT licensed, by Startfrom." src="./.github/assets/cover.jpg" width="100%"></a>
+  <a href="https://startfrom.co/?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><img alt="Elias Vent: A dark, motion-led portfolio template for Astro and Next.js. Free and MIT licensed, by Startfrom." src="./.github/assets/cover.jpg" width="100%"></a>
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
   &nbsp;·&nbsp;
   <a href="https://elias-vent-next.startfrom.co"><b>Next.js demo</b></a>
   &nbsp;·&nbsp;
-  <a href="https://startfrom.co/templates/elias-vent?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><b>Startfrom</b></a>
+  <a href="https://startfrom.co/?utm_source=github&utm_medium=readme&utm_campaign=elias-vent"><b>Startfrom</b></a>
 </p>
 
 # Elias Vent, a portfolio theme for Astro and Next.js
