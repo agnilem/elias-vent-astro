@@ -1,6 +1,8 @@
 // Behaviour for Footer.astro (moved out of the component so the Astro and Next builds share it).
 import { initShader } from "../shader";
-document.querySelectorAll<HTMLCanvasElement>("[data-shader]").forEach(initShader);
+import { whenNear } from "../lib";
+// The shader compiles when the footer is two screens away, not at page load.
+document.querySelectorAll<HTMLCanvasElement>("[data-shader]").forEach((el) => whenNear(el, () => initShader(el)));
 
 // Framer "auto-fit" text: the wordmark is sized to span the container width.
 document.querySelectorAll<HTMLElement>("[data-fit]").forEach((box) => {

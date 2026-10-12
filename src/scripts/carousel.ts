@@ -61,6 +61,10 @@ uniform float uVel;
 uniform float uTint;
 uniform vec2 uPlanePx;
 uniform float uRadiusPx;
+uniform float uFlip;
+vec4 tx(vec2 uv){
+  return texture2D(uTex, vec2(uv.x, mix(uv.y, 1.0 - uv.y, uFlip)));
+}
 vec2 cover(vec2 uv, float ia, float ba){
   vec2 s = ia > ba ? vec2(ba/ia, 1.0) : vec2(1.0, ia/ba);
   return (uv - 0.5) * s + 0.5;
@@ -75,9 +79,9 @@ void main(){
   uv += flow;
   float ch = uChroma * (0.003 + mv * 0.004);
   vec2 dir = vec2(ch, ch * 0.35);
-  float r = texture2D(uTex, uv + dir).r;
-  float g = texture2D(uTex, uv).g;
-  float b = texture2D(uTex, uv - dir).b;
+  float r = tx(uv + dir).r;
+  float g = tx(uv).g;
+  float b = tx(uv - dir).b;
   vec3 col = vec3(r, g, b) * (1.0 - uTint);
   vec2 halfP = uPlanePx * 0.5;
   vec2 p = (vUv - 0.5) * uPlanePx;
@@ -161,35 +165,65 @@ export function initCarousel(root: HTMLElement) {
   const aPos = gl.getAttribLocation(prog, "aPos");
   gl.enableVertexAttribArray(aPos);
   gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
   const u = (name: string) => gl.getUniformLocation(prog, name);
   const uni = {
     uHalf: u("uHalf"), uRes: u("uRes"), uTiltZ: u("uTiltZ"), uSkewY: u("uSkewY"), uAngle: u("uAngle"), uRadius: u("uRadius"),
-    uPersp: u("uPersp"), uShiftX: u("uShiftX"), uTex: u("uTex"), uImgA: u("uImgA"), uBoxA: u("uBoxA"), uTime: u("uTime"),
+    uPersp: u("uPersp"), uShiftX: u("uShiftX"), uTex: u("uTex"), uFlip: u("uFlip"), uImgA: u("uImgA"), uBoxA: u("uBoxA"), uTime: u("uTime"),
     uAmp: u("uAmp"), uChroma: u("uChroma"), uVel: u("uVel"), uTint: u("uTint"), uPlanePx: u("uPlanePx"), uRadiusPx: u("uRadiusPx"),
   };
 
-  const texs: Array<{ tex: WebGLTexture; aspect: number } | null> = new Array(n).fill(null);
-  srcs.forEach((src, i) => {
+  type Tex = { tex: WebGLTexture; aspect: number; flip: number };
+  const texs: Array<Tex | null> = new Array(n).fill(null);
+  // `flip`: 1 when the rows went in top first (bitmap), 0 when the upload flipped them (image element).
+  const upload = (i: number, source: TexImageSource, w: number, h: number, flip: number) => {
+    try {
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, !flip);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+      texs[i] = { tex, aspect: w / (h || 1) || 1.5, flip };
+    } catch {
+      /* ignore */
+    }
+  };
+  const loadImage = (i: number) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = () => {
-      try {
-        const tex = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-        texs[i] = { tex, aspect: img.naturalWidth / (img.naturalHeight || 1) || 1.5 };
-      } catch {
-        /* ignore */
-      }
-    };
-    img.src = src;
-  });
+    img.onload = () => upload(i, img, img.naturalWidth, img.naturalHeight, 0);
+    img.src = srcs[i];
+  };
+  // Covers are decoded off the main thread (createImageBitmap), so a 1740px image
+  // never stalls a frame; browsers without it decode on upload, as before.
+  const loadSlide = (i: number) => {
+    if (typeof createImageBitmap !== "function" || typeof fetch !== "function") return loadImage(i);
+    fetch(srcs[i])
+      .then((r) => (r.ok ? r.blob() : Promise.reject()))
+      .then((b) => createImageBitmap(b))
+      .then((bmp) => {
+        upload(i, bmp, bmp.width, bmp.height, 1);
+        bmp.close?.();
+      })
+      .catch(() => loadImage(i));
+  };
+  // The first two covers are on screen at the top of the page; the rest follow
+  // once the page has loaded, or on the first scroll if that comes sooner.
+  let restDone = false;
+  const rest = () => {
+    if (restDone) return;
+    restDone = true;
+    srcs.forEach((_, i) => i > 1 && loadSlide(i));
+  };
+  srcs.slice(0, 2).forEach((_, i) => loadSlide(i));
+  if (document.readyState === "complete") rest();
+  else {
+    window.addEventListener("load", rest, { once: true });
+    window.addEventListener("scroll", rest, { once: true, passive: true });
+  }
 
   let W = 0;
   let H = 0;
@@ -249,7 +283,7 @@ export function initCarousel(root: HTMLElement) {
 
     let best = 0;
     let bestDist = Infinity;
-    const draws: Array<{ imgOff: number; tex: { tex: WebGLTexture; aspect: number } }> = [];
+    const draws: Array<{ imgOff: number; tex: Tex }> = [];
     for (let i = 0; i < n; i++) {
       const offset = i * step - s;
       const ov = overlays[i];
@@ -285,6 +319,7 @@ export function initCarousel(root: HTMLElement) {
       gl.bindTexture(gl.TEXTURE_2D, d.tex.tex);
       gl.uniform1i(uni.uTex, 0);
       gl.uniform1f(uni.uImgA, d.tex.aspect);
+      gl.uniform1f(uni.uFlip, d.tex.flip);
       gl.drawArrays(gl.TRIANGLES, 0, vertCount);
     }
 

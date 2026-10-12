@@ -10,6 +10,25 @@ export const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: r
 
 export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
+/** Run `fn` right after the browser has painted, so set-up work never holds back the first frame. */
+export function afterPaint(fn: () => void) {
+  requestAnimationFrame(() => setTimeout(fn, 0));
+}
+
+/** Run `fn` once, when `el` comes within `screens` viewport heights of the screen. */
+export function whenNear(el: Element, fn: () => void, screens = 2) {
+  if (typeof IntersectionObserver === "undefined") return fn();
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      fn();
+    },
+    { rootMargin: `${screens * 100}% 0px` }
+  );
+  io.observe(el);
+}
+
 /** Smooth scroll to an absolute page offset (lenis-aware). */
 export function scrollToY(y: number) {
   const l = window.__lenis;

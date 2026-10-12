@@ -7,7 +7,8 @@ const nextConfig: NextConfig = {
   trailingSlash: true, // /projects/fauna/, like the Astro build
   images: { unoptimized: true },
   // The 404 renders as its own document (src/app/global-not-found.tsx).
-  experimental: { globalNotFound: true },
+  // inlineCss: styles go into the page itself, so the first paint does not wait for a stylesheet request.
+  experimental: { globalNotFound: true, inlineCss: true },
 };
 
 export default nextConfig;
